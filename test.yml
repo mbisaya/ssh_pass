@@ -1,0 +1,19 @@
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+     configs
+       -  password-auth
+       -  pwquality.conf
+       -  system-auth
+
+    - name: Run the tasks inside the block
+      block:
+        - name: check the directory if already exist
+          stat:
+            path: /root/test/{{ item }}
+          with_items:
+            - "configs"
+          register: config_check
+
+

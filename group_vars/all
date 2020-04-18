@@ -1,0 +1,27 @@
+---
+
+CRQ_number: R014
+
+#SSH Lockdown
+sshd_location: /etc/ssh/sshd_config
+sshd_backup: /etc/ssh/sshd_config_{{ CRQ_number }}
+sshd_rhel6: /home/os_zted0131/com/ProjectWhite/templates/<rhel6_sshd_file>
+ssh_rhel7: /home/os_zted0131/com/ProjectWhite/templates/<rhel7_sshd_file> 
+#Password Policy
+
+password_config:
+  - /home/os_zted0157/pwquality.conf
+  - /home/os_zted0157/system-auth
+  - /home/os_zted0157/password-auth
+  - /home/os_zted0157/login.defs
+
+password_files_backup:
+  - /home/os_zted0157/pwquality.conf_{{ CRQ_number }}
+  - /home/os_zted0157/system-auth_{{ CRQ_number }}
+  - /home/os_zted0157/password-auth_{{ CRQ_number }}
+  - /home/os_zted0157/login.defs_{{ CRQ_number }}
+
+config_files:
+  - { a: "/root/test/pwquality.conf", b: "/root/test/pwquality.conf_{{ CRQ_number }}", c: "/home/mikay/ansible-backups/ssh_pass/templates/pwquality.conf" }
+  - { a: "/root/test/system-auth", b: "/root/test/system-auth_{{ CRQ_number }}", c: "/home/mikay/ansible-backups/ssh_pass/templates/system-auth" }
+  - { a: "/root/test/password-auth", b: "/root/test/password-auth_{{ CRQ_number }}", c: "/home/mikay/ansible-backups/ssh_pass/templates/password-auth" }

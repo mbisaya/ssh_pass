@@ -1,0 +1,38 @@
+- hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+
+    - name: Password Policy - Check Backup if existing
+      stat:
+        path: "{{ item.b }}"
+      register: pass_config_check      
+      with_items: "{{ config_files }}"
+      tags: passwd_policy
+
+    - debug:
+        msg: "status of {{item.0.b}} : {{item.1.stat.exists}}"
+      with_together:
+         - "{{ config_files }}"
+         - "{{ pass_config_check.results}}"
+
+    - name: Password Policy - Create backup if it does not exist
+      shell: cp -pi {{ item.0.a }} {{ item.0.b }}
+      with_together:
+         - "{{ config_files }}"
+         - "{{ pass_config_check.results}}"
+      when: item.1.stat.exists == False
+
+    - name: Password Policy - Update config files
+      template: 
+        src: "{{ item.0.c }}"
+        dest: "{{ item.0.a }}"
+        owner: root
+        group: root
+        mode: '0644'
+        force: no
+      with_together:
+         - "{{ config_files }}"
+         - "{{ pass_config_check.results}}"
+      when: item.1.stat.exists == False
+       
